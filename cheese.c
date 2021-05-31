@@ -12,12 +12,13 @@ static int cheese_value(char piece) {
     case 'P':
       return 1;
     case 'B':
+      return 3;
     case 'N':
-      return 2;
+      return 3;
     case 'R':
       return 5;
     case 'Q':
-      return 7;
+      return 9;
     case 'K':
       return 100;
   }
