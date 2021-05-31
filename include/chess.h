@@ -10,7 +10,7 @@ int chess_turn(char piece);
 int chess_valid(char *board, int *move, int turn);
 
 int **chess_get_moves(char *board, int turn);
-int **chess_get_valid_moves(char *board, int turn);
+void chess_free(int **moves);
 
 void chess_move(char *board, int *move);
 
