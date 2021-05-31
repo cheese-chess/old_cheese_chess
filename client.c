@@ -72,7 +72,7 @@ int main(void) {
   Texture board_tex = LoadTexture("assets/board.png");
   Texture shadow_tex = LoadTexture("assets/shadow.png");
 
-  /* char board[64] = \
+  char board[64] = \
     "rnbqkbnr" \
     "pppppppp" \
     "        " \
@@ -81,9 +81,9 @@ int main(void) {
     "        " \
     "PPPPPPPP" \
     "RNBQKBNR" \
-  ; */
+  ; 
 
-  char board[64] = \
+  /*char board[64] = \
     "r bqkb r" \
     "pppppppp" \
     "        " \
@@ -92,7 +92,7 @@ int main(void) {
     "        " \
     "PPPPPPPP" \
     "R BQKB R" \
-  ;
+  ;*/
 
   int moving_idx = -1, moving_rel_x = 0, moving_rel_y = 0;
 

@@ -121,6 +121,17 @@ int chess_valid(char *board, int *move, int turn) {
     }
   }
 
+  if (board[move[0]] == 'N' || board[move[0]] == 'n') {
+    if (board[move[1]] == ' ') {
+      if (board[move[1]] == board[move[0] + 6]  || board[move[1]] == board[move[0] - 6]  ||
+          board[move[1]] == board[move[0] + 10] || board[move[1]] == board[move[0] - 10] ||
+          board[move[1]] == board[move[0] + 15] || board[move[1]] == board[move[0] - 15] ||
+          board[move[1]] == board[move[0] + 17] || board[move[1]] == board[move[0] - 17] /* All possible knight moves */) {
+        return 1;
+      } 
+    }
+  }
+
   if (board[move[0]] == 'B' || board[move[0]] == 'b' || board[move[0]] == 'Q' || board[move[0]] == 'q') {
     if (ABS(pos_0[0] - pos_1[0]) == ABS(pos_0[1] - pos_1[1])) {
       if ((pos_1[0] - pos_0[0]) > 0 && (pos_1[1] - pos_0[1]) > 0) {
