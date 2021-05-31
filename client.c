@@ -1,5 +1,6 @@
 #include <raylib.h>
 #include <cheese.h>
+#include <chess.h>
 
 static Texture get_piece_tex(Texture pieces_tex[12], char piece) {
   Texture piece_tex;
@@ -118,7 +119,7 @@ int main(void) {
 
       if (x >= 0 && x < 8 && y >= 0 && y < 8) {
         if (moving_idx == -1) {
-          if (cheese_turn(board[x + (y * 8)]) == CHEESE_WHITE) {
+          if (chess_turn(board[x + (y * 8)]) == CHESS_WHITE) {
             moving_idx = x + (y * 8);
 
             moving_rel_x = (x * 64 + 32) - GetMouseX();
@@ -127,12 +128,12 @@ int main(void) {
         } else {
           int move[2] = {moving_idx, x + (y * 8)};
 
-          if (cheese_valid(board, move, CHEESE_WHITE)) {
-            cheese_move(board, move);
+          if (chess_valid(board, move, CHESS_WHITE)) {
+            chess_move(board, move);
 
             moving_idx = -1;
 
-            cheese_ai_move(board, CHEESE_BLACK);
+            cheese_move(board, CHESS_BLACK);
           } else if (move[0] == move[1]) {
             moving_idx = -1;
           }

@@ -1,37 +1,14 @@
 #include <ctype.h>
+#include <chess.h>
 #include <stdlib.h>
 #include <cheese.h>
 
-int cheese_turn(char piece) {
-  if (piece == ' ') return CHEESE_NONE;
-  else if (isupper(piece)) return CHEESE_WHITE;
-  else return CHEESE_BLACK;
-}
-
-int cheese_eval(char *board) {
+int cheese_eval(char *board, int turn) {
+  // Calculate score of board for the specified player(CHESS_BLACK or CHESS_WHITE)
   return 0;
 }
 
-int cheese_valid(char *board, int *move, int turn) {
-  if (move[0] == move[1]) return 0;
-  else if (cheese_turn(board[move[0]]) == cheese_turn(board[move[1]])) return 0;
-
-  return 1;
-}
-
-int **cheese_get_moves(char *board, int turn) {
-  return NULL;
-}
-
-int **cheese_get_valid_moves(char *board, int turn) {
-  return NULL;
-}
-
-void cheese_move(char *board, int *move) {
-  board[move[1]] = board[move[0]];
-  board[move[0]] = ' ';
-}
-
-void cheese_ai_move(char *board, int turn) {
+void cheese_move(char *board, int turn) {
+  // Select and make best move(for CHESS_BLACK or CHESS_WHITE)
   return;
 }
