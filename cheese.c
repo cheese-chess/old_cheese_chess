@@ -4,23 +4,25 @@
 #include <string.h>
 #include <cheese.h>
 
+#define INFINITY 10000000
+
 static int cheese_value(char piece) {
   if (piece == ' ') return 0;
   if (piece >= 'a') piece -= 32;
 
   switch (piece) {
     case 'P':
-      return 1;
-    case 'B':
-      return 3;
-    case 'N':
-      return 3;
-    case 'R':
-      return 5;
-    case 'Q':
-      return 9;
-    case 'K':
       return 100;
+    case 'B':
+      return 300;
+    case 'N':
+      return 300;
+    case 'R':
+      return 500;
+    case 'Q':
+      return 900;
+    case 'K':
+      return INFINITY;
   }
 
   return 0;

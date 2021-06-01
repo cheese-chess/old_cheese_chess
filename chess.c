@@ -122,13 +122,13 @@ int chess_valid(char *board, int *move, int turn) {
   }
 
   if (board[move[0]] == 'N' || board[move[0]] == 'n') {
-    if (board[move[1]] == ' ') {
-      if (board[move[1]] == board[move[0] + 6]  || board[move[1]] == board[move[0] - 6]  ||
-          board[move[1]] == board[move[0] + 10] || board[move[1]] == board[move[0] - 10] ||
-          board[move[1]] == board[move[0] + 15] || board[move[1]] == board[move[0] - 15] ||
-          board[move[1]] == board[move[0] + 17] || board[move[1]] == board[move[0] - 17] /* All possible knight moves */) {
+    if (board[move[1]] == board[move[0] + 6]  || board[move[1]] == board[move[0] - 6]  ||
+        board[move[1]] == board[move[0] + 10] || board[move[1]] == board[move[0] - 10] ||
+        board[move[1]] == board[move[0] + 15] || board[move[1]] == board[move[0] - 15] ||
+        board[move[1]] == board[move[0] + 17] || board[move[1]] == board[move[0] - 17] /* All possible knight moves */) {
+      if (chess_turn(board[move[1]]) != turn && chess_turn(board[move[1]]) == CHESS_NONE) {
         return 1;
-      } 
+      }
     }
   }
 
@@ -192,6 +192,7 @@ int **chess_get_moves(char *board, int turn) {
   // I mean, it technically works, but it is the fuckin
   // slowest way of doing it in the entire universe...
 
+  // we never saw the aliens' solution...
   int **move_arr = malloc(sizeof(int *));
   int move_cnt = 0;
 

@@ -72,7 +72,7 @@ int main(void) {
   Texture board_tex = LoadTexture("assets/board.png");
   Texture shadow_tex = LoadTexture("assets/shadow.png");
 
-  char board[64] = \
+ char board[64] = \
     "rnbqkbnr" \
     "pppppppp" \
     "        " \
