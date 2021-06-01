@@ -121,58 +121,43 @@ int chess_valid(char *board, int *move, int turn) {
     }
   }
 
-  if (board[move[0]] == 'N' || board[move[0]] == 'n') {
-    if (board[move[1]] == board[move[0] + 6]  || board[move[1]] == board[move[0] - 6]  ||
-        board[move[1]] == board[move[0] + 10] || board[move[1]] == board[move[0] - 10] ||
-        board[move[1]] == board[move[0] + 15] || board[move[1]] == board[move[0] - 15] ||
-        board[move[1]] == board[move[0] + 17] || board[move[1]] == board[move[0] - 17] /* All possible knight moves */) {
-      if (chess_turn(board[move[1]]) != turn && chess_turn(board[move[1]]) == CHESS_NONE) {
+  if (board[move[0]] == 'B' || board[move[0]] == 'b' || board[move[0]] == 'Q' || board[move[0]] == 'q') {
+    if (chess_turn(board[move[1]]) != turn) {
+      if (ABS(pos_0[0] - pos_1[0]) == ABS(pos_0[1] - pos_1[1])) {
+        int dir_x = (pos_1[0] - pos_0[0]) / ABS(pos_1[0] - pos_0[0]);
+        int dir_y = (pos_1[1] - pos_0[1]) / ABS(pos_1[1] - pos_0[1]);
+
+        int pos_x = pos_0[0] + dir_x, pos_y = pos_0[1] + dir_y;
+
+        while (pos_x != pos_1[0] && pos_y != pos_1[1]) {
+          if (chess_turn(board[CHESS_GET_IDX(pos_x, pos_y)]) != CHESS_NONE)
+            return 0;
+
+          pos_x += dir_x; pos_y += dir_y;
+        }
+
         return 1;
       }
     }
   }
 
-  if (board[move[0]] == 'B' || board[move[0]] == 'b' || board[move[0]] == 'Q' || board[move[0]] == 'q') {
-    if (ABS(pos_0[0] - pos_1[0]) == ABS(pos_0[1] - pos_1[1])) {
-      if ((pos_1[0] - pos_0[0]) > 0 && (pos_1[1] - pos_0[1]) > 0) {
-        // Down-right
+  if (board[move[0]] == 'N' || board[move[0]] == 'n') {
+    if (chess_turn(board[move[1]]) != turn) {
+      int can_move = 0;
 
-        for (int i = pos_0[0] + 1; i <= pos_1[0]; i++) {
-          if (chess_turn(board[CHESS_GET_IDX(i, pos_0[1] + (i - pos_0[0]))]) == turn)
-            return 0;
-          if (i != pos_1[0] && chess_turn(board[CHESS_GET_IDX(i, pos_0[1] + (i - pos_0[0]))]) != CHESS_NONE && chess_turn(board[CHESS_GET_IDX(i, pos_0[1] + (i - pos_0[0]))]) != turn)
-            return 0;
-        }
-      } else if ((pos_1[0] - pos_0[0]) < 0 && (pos_1[1] - pos_0[1]) > 0) {
-        // Down-left
+      can_move |= (pos_1[0] == pos_0[0] - 1 && pos_1[1] == pos_0[1] - 2);
+      can_move |= (pos_1[0] == pos_0[0] - 1 && pos_1[1] == pos_0[1] + 2);
 
-        for (int i = pos_1[0]; i <= pos_0[0] - 1; i++) {
-          if (chess_turn(board[CHESS_GET_IDX(i, pos_0[1] + (i - pos_0[0]))]) == turn)
-            return 0;
-          if (i != pos_1[0] && chess_turn(board[CHESS_GET_IDX(i, pos_0[1] + (i - pos_0[0]))]) != CHESS_NONE && chess_turn(board[CHESS_GET_IDX(i, pos_0[1] + (i - pos_0[0]))]) != turn)
-            return 0;
-        }
-      } else if ((pos_1[0] - pos_0[0]) > 0 && (pos_1[1] - pos_0[1]) < 0) {
-        // Up-right
+      can_move |= (pos_1[0] == pos_0[0] + 1 && pos_1[1] == pos_0[1] - 2);
+      can_move |= (pos_1[0] == pos_0[0] + 1 && pos_1[1] == pos_0[1] + 2);
 
-        for (int i = pos_0[0] + 1; i <= pos_1[0]; i++) {
-          if (chess_turn(board[CHESS_GET_IDX(i, pos_0[1] + (i - pos_0[0]))]) == turn)
-            return 0;
-          if (i != pos_1[0] && chess_turn(board[CHESS_GET_IDX(i, pos_0[1] + (i - pos_0[0]))]) != CHESS_NONE && chess_turn(board[CHESS_GET_IDX(i, pos_0[1] + (i - pos_0[0]))]) != turn)
-            return 0;
-        }
-      } else if ((pos_1[0] - pos_0[0]) < 0 && (pos_1[1] - pos_0[1]) < 0) {
-        // Up-left
+      can_move |= (pos_1[0] == pos_0[0] - 2 && pos_1[1] == pos_0[1] - 1);
+      can_move |= (pos_1[0] == pos_0[0] - 2 && pos_1[1] == pos_0[1] + 1);
 
-        for (int i = pos_1[0]; i <= pos_0[0] - 1; i++) {
-          if (chess_turn(board[CHESS_GET_IDX(i, pos_0[1] + (i - pos_0[0]))]) == turn)
-            return 0;
-          if (i != pos_1[0] && chess_turn(board[CHESS_GET_IDX(i, pos_0[1] + (i - pos_0[0]))]) != CHESS_NONE && chess_turn(board[CHESS_GET_IDX(i, pos_0[1] + (i - pos_0[0]))]) != turn)
-            return 0;
-        }
-      }
+      can_move |= (pos_1[0] == pos_0[0] + 2 && pos_1[1] == pos_0[1] - 1);
+      can_move |= (pos_1[0] == pos_0[0] + 2 && pos_1[1] == pos_0[1] + 1);
 
-      return 1;
+      if (can_move) return 1;
     }
   }
 

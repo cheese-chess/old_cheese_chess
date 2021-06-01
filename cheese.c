@@ -4,7 +4,16 @@
 #include <string.h>
 #include <cheese.h>
 
-#define INFINITY 10000000
+const int cheese_table[] = {
+  11, 12, 13, 14, 14, 13, 12, 11,
+  12, 13, 14, 15, 15, 14, 13, 12,
+  13, 14, 15, 16, 16, 15, 14, 13,
+  14, 15, 16, 17, 17, 16, 15, 14,
+  14, 15, 16, 17, 17, 16, 15, 14,
+  13, 14, 15, 16, 16, 15, 14, 13,
+  12, 13, 14, 15, 15, 14, 13, 12,
+  11, 12, 13, 14, 14, 13, 12, 11
+};
 
 static int cheese_value(char piece) {
   if (piece == ' ') return 0;
@@ -12,17 +21,17 @@ static int cheese_value(char piece) {
 
   switch (piece) {
     case 'P':
-      return 100;
+      return 1;
     case 'B':
-      return 300;
+      return 3;
     case 'N':
-      return 300;
+      return 3;
     case 'R':
-      return 500;
+      return 5;
     case 'Q':
-      return 900;
+      return 9;
     case 'K':
-      return INFINITY;
+      return 1048576;
   }
 
   return 0;
@@ -35,16 +44,16 @@ int cheese_eval(char *board, int turn) {
     if (chess_turn(board[i]) == CHESS_NONE) {
       continue;
     } else if (chess_turn(board[i]) == turn) {
-      score += cheese_value(board[i]);
+      score += cheese_value(board[i]) * cheese_table[i];
     } else {
-      score -= cheese_value(board[i]);
+      score -= cheese_value(board[i]) * cheese_table[i];
     }
   }
 
   return score;
 }
 
-void cheese_move(char *board, int turn) {
+void cheese_move(char *board, int turn, int layers) {
   int **moves = chess_get_moves(board, turn);
 
   int move_cnt = 0;
@@ -52,7 +61,7 @@ void cheese_move(char *board, int turn) {
   while (moves[move_cnt] != NULL) move_cnt++;
 
   int best_move = -1;
-  int best_score = -100;
+  int best_score = -1048576;
 
   char *board_clone = malloc(64);
 
@@ -60,6 +69,10 @@ void cheese_move(char *board, int turn) {
     memcpy(board_clone, board, 64);
 
     chess_move(board_clone, moves[i]);
+
+    if (layers > 0) {
+      cheese_move(board_clone, 1 - turn, layers - 1);
+    }
 
     int score = cheese_eval(board_clone, turn);
 

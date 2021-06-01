@@ -144,7 +144,7 @@ int main(void) {
 
             moving_idx = -1;
 
-            cheese_move(board, CHESS_BLACK);
+            cheese_move(board, CHESS_BLACK, 2);
           } else if (move[0] == move[1]) {
             moving_idx = -1;
           }
