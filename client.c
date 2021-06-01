@@ -118,8 +118,8 @@ int main(void) {
       Texture piece_tex = get_piece_tex(pieces_tex, board[moving_idx]);
       if (piece_tex.width == 0) continue;
 
-      DrawTextureEx(shadow_tex, (Vector2){GetMouseX() + moving_rel_x, GetMouseY() + moving_rel_y - 8}, 0, 4, WHITE);
-      DrawTextureEx(piece_tex, (Vector2){GetMouseX() + moving_rel_x, GetMouseY() + moving_rel_y - 8}, 0, 4, WHITE);
+      DrawTextureEx(shadow_tex, (Vector2){(GetMouseX() + moving_rel_x) & ~3, ((GetMouseY() + moving_rel_y) & ~3) - 8}, 0, 4, WHITE);
+      DrawTextureEx(piece_tex, (Vector2){(GetMouseX() + moving_rel_x) & ~3, ((GetMouseY() + moving_rel_y) & ~3) - 8}, 0, 4, WHITE);
     }
 
     EndDrawing();
@@ -144,7 +144,7 @@ int main(void) {
 
             moving_idx = -1;
 
-            cheese_move(board, CHESS_BLACK, 2);
+            cheese_move(board, CHESS_BLACK, 4);
           } else if (move[0] == move[1]) {
             moving_idx = -1;
           }
