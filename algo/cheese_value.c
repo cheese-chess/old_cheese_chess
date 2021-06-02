@@ -1,6 +1,4 @@
-// TODO: Make this algorithm GUD
-
-#ifdef CHEESE_ALGO_MOVES
+#ifdef CHEESE_ALGO_VALUE
 
 #include <ctype.h>
 #include <chess.h>
@@ -67,16 +65,17 @@ static int cheese_value(char piece, int pos) {
 }
 
 int cheese_eval(char *board, int turn) {
-  int **moves = chess_get_moves(board, turn);
+  int score = 0;
 
-  int move_cnt = 0, score = 0;
-
-  while (moves[move_cnt] != NULL) {
-    score += cheese_value(board[moves[move_cnt][0]], moves[move_cnt][0]);
-    move_cnt++;
+  for (int i = 0; i < 64; i++) {
+    if (chess_turn(board[i]) == CHESS_NONE) {
+      continue;
+    } else if (chess_turn(board[i]) == turn) {
+      score += cheese_value(board[i], i);
+    } else {
+      score -= cheese_value(board[i], i);
+    }
   }
-
-  chess_free(moves);
 
   return score;
 }
@@ -84,12 +83,14 @@ int cheese_eval(char *board, int turn) {
 int cheese_move(char *board, int turn, int layers) {
   int **moves = chess_get_moves(board, turn);
 
+  if (!moves) return -10000000;
+
   int move_cnt = 0;
 
   while (moves[move_cnt] != NULL) move_cnt++;
 
   int best_move = -1;
-  int best_score = move_cnt;
+  int best_score = -10000000;
 
   char *board_clone = malloc(64);
 
@@ -98,12 +99,10 @@ int cheese_move(char *board, int turn, int layers) {
 
     chess_move(board_clone, moves[i]);
 
-    int score = 0;
+    int score = cheese_eval(board_clone, turn);
 
     if (layers > 0) {
-      score = cheese_move(board_clone, 1 - turn, layers - 1);
-    } else {
-      score = cheese_eval(board_clone, turn);
+      score += cheese_move(board_clone, 1 - turn, layers - 1);
     }
 
     if (score > best_score) {

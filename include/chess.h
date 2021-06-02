@@ -7,6 +7,7 @@
 
 int chess_turn(char piece);
 
+int chess_ended(char *board);
 int chess_valid(char *board, int *move, int turn);
 
 int **chess_get_moves(char *board, int turn);

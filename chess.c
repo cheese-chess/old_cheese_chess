@@ -16,6 +16,17 @@ int chess_turn(char piece) {
   else return CHESS_BLACK;
 }
 
+int chess_ended(char *board) {
+  int has_white_king = 0, has_black_king = 0;
+
+  for (int i = 0; i < 64; i++) {
+    if (board[i] == 'k') has_black_king = 1;
+    if (board[i] == 'K') has_white_king = 1;
+  }
+
+  return !(has_black_king && has_white_king);
+}
+
 int chess_valid(char *board, int *move, int turn) {
   if (move[0] == move[1]) return 0;
   else if (chess_turn(board[move[0]]) == chess_turn(board[move[1]])) return 0;
@@ -182,6 +193,9 @@ int **chess_get_moves(char *board, int turn) {
   int move_cnt = 0;
 
   move_arr[move_cnt] = NULL;
+
+  if (!board) return move_arr;
+  if (chess_ended(board)) return move_arr;
 
   for (int i = 0; i < 64; i++) {
     if (chess_turn(board[i]) == turn) {

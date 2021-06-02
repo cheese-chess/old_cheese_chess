@@ -72,7 +72,7 @@ int main(void) {
   Texture board_tex = LoadTexture("assets/board.png");
   Texture shadow_tex = LoadTexture("assets/shadow.png");
 
- char board[64] = \
+ char board[65] = \
     "rnbqkbnr" \
     "pppppppp" \
     "        " \
@@ -144,7 +144,7 @@ int main(void) {
 
             moving_idx = -1;
 
-            cheese_move(board, CHESS_BLACK, 4);
+            cheese_move(board, CHESS_BLACK, 2);
           } else if (move[0] == move[1]) {
             moving_idx = -1;
           }

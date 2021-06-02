@@ -1,4 +1,4 @@
-#ifdef CHEESE_ALGO_VALUE
+#ifdef CHEESE_ALGO_SEGFAULTDEV
 
 #include <ctype.h>
 #include <chess.h>
@@ -57,8 +57,7 @@ static int cheese_value(char piece, int pos) {
     case 'Q':
       return 9 * cheese_table[pos];
     case 'K':
-      if (black) return 1000 * burger_king_black_table[pos];
-      else return 1000 * burger_king_white_table[pos];
+      return 1000;
   }
 
   return 0;
@@ -82,13 +81,17 @@ int cheese_eval(char *board, int turn) {
 
 int cheese_move(char *board, int turn, int layers) {
   int **moves = chess_get_moves(board, turn);
+  if (!moves) return -10000000;
 
   int move_cnt = 0;
 
   while (moves[move_cnt] != NULL) move_cnt++;
 
+  printf("Possible moves: %d\n", move_cnt);
+  printf("Board: \"%s\"\n", board);
+
   int best_move = -1;
-  int best_score = -1000;
+  int best_score = -10000000;
 
   char *board_clone = malloc(64);
 
@@ -100,8 +103,12 @@ int cheese_move(char *board, int turn, int layers) {
     int score = cheese_eval(board_clone, turn);
 
     if (layers > 0) {
-      score = (score + cheese_move(board_clone, 1 - turn, layers - 1)) / 2;
+      int temp_score = -cheese_move(board_clone, 1 - turn, layers - 1);
+
+      score += temp_score;
     }
+
+    printf("Move %d[%d('%c') to %d('%c')]: Score %d\n", i, moves[i][0], board[moves[i][0]], moves[i][1], board[moves[i][1]], score);
 
     if (score > best_score) {
       best_move = i;
@@ -111,7 +118,12 @@ int cheese_move(char *board, int turn, int layers) {
 
   free(board_clone);
 
-  if (best_move >= 0) chess_move(board, moves[best_move]);
+  if (best_move >= 0) {
+    printf("Chosen move %d[%d('%c') to %d('%c')]: Score %d\n", best_move, moves[best_move][0], board[moves[best_move][0]], moves[best_move][1], board[moves[best_move][1]], best_score);
+    chess_move(board, moves[best_move]);
+  } else {
+    printf("No move chosen\n");
+  }
 
   chess_free(moves);
 
