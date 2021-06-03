@@ -1,6 +1,8 @@
 #include <raylib.h>
+#include <stdlib.h>
 #include <cheese.h>
 #include <chess.h>
+#include <math.h>
 
 static Texture get_piece_tex(Texture pieces_tex[12], char piece) {
   Texture piece_tex;
@@ -72,6 +74,9 @@ int main(void) {
   Texture board_tex = LoadTexture("assets/board.png");
   Texture shadow_tex = LoadTexture("assets/shadow.png");
 
+  Texture option_black_tex = LoadTexture("assets/option_black.png");
+  Texture option_white_tex = LoadTexture("assets/option_white.png");
+
  char board[65] = \
     "rnbqkbnr" \
     "pppppppp" \
@@ -96,6 +101,10 @@ int main(void) {
 
   int moving_idx = -1, moving_rel_x = 0, moving_rel_y = 0;
 
+  int move_changed = 1;
+
+  int best_move[2] = {0, 0};
+
   while (!WindowShouldClose()) {
     BeginDrawing();
 
@@ -112,6 +121,30 @@ int main(void) {
       if (i != moving_idx) {
         DrawTextureEx(piece_tex, (Vector2){x * 64 + 32, y * 56}, 0, 4, WHITE);
       }
+    }
+
+    if (move_changed) {
+      cheese_move(board, best_move, 0, CHESS_WHITE, 3);
+
+      move_changed = 0;
+    } else {
+      int x_0 = best_move[0] % 8;
+      int y_0 = best_move[0] / 8;
+      int x_1 = best_move[1] % 8;
+      int y_1 = best_move[1] / 8;
+
+      // DrawTextureEx(option_white_tex, (Vector2){x * 64 + 32, y * 56}, 0, 4, WHITE);
+
+      float dist = sqrtf(
+                        ((float)(x_0) - (float)(x_1)) * ((float)(x_0) - (float)(x_1)) +
+                        ((float)(y_0) - (float)(y_1)) * ((float)(y_0) - (float)(y_1))
+                      ) * 64;
+
+      float angle = (atan2f((float)(y_1) - (float)(y_0), (float)(x_1) - (float)(x_0)) * 180.0) / PI;
+
+      DrawTexturePro(option_white_tex, (Rectangle){0, 0, 16, 16}, (Rectangle){x_0 * 64 + 64, y_0 * 56 + 56, 64, dist}, (Vector2){32, 32}, angle - 90.0, WHITE);
+
+      DrawLineEx((Vector2){x_0 * 64 + 64, y_0 * 56 + 84}, (Vector2){x_1 * 64 + 64, y_1 * 56 + 84}, 5, RED);
     }
 
     if (moving_idx != -1) {
@@ -144,13 +177,22 @@ int main(void) {
 
             moving_idx = -1;
 
-            cheese_move(board, CHESS_BLACK, 2);
+            cheese_move(board, NULL, 1, CHESS_BLACK, 4);
+
+            move_changed = 1;
           } else if (move[0] == move[1]) {
             moving_idx = -1;
           }
         }
       } else {
         moving_idx = -1;
+      }
+    } else if (IsKeyPressed(KEY_SPACE)) {
+      if (moving_idx == -1) {
+        cheese_move(board, NULL, 1, CHESS_WHITE, 4);
+        cheese_move(board, NULL, 1, CHESS_BLACK, 4);
+
+        move_changed = 1;
       }
     }
   }
