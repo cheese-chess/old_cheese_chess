@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <cheese.h>
+#include <stdio.h>
 
 const int cheese_table[] = {
   11, 12, 13, 14, 14, 13, 12, 11,
@@ -41,7 +42,6 @@ const int burger_king_white_table[] = {
 
 static int cheese_value(char piece, int pos) {
   int black = 0;
-
   if (piece == ' ') return 0;
   if (piece >= 'a') piece -= 32, black = 1;
 
