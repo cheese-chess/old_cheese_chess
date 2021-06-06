@@ -119,7 +119,7 @@ int cheese_eval(char *board, int turn) {
     }
   }
 
-  return score + (rand() % 2);
+  return score;
 }
 
 int cheese_move(char *board, int *move, int do_move, int turn, int layers) {
@@ -129,6 +129,22 @@ int cheese_move(char *board, int *move, int do_move, int turn, int layers) {
   int move_cnt = 0;
 
   while (moves[move_cnt] != NULL) move_cnt++;
+
+  if (move_cnt) {
+    for (int i = 0; i < move_cnt; i++) {
+      int idx_1 = rand() % move_cnt;
+      int idx_2 = rand() % move_cnt;
+
+      if (idx_1 == idx_2) {
+        i--;
+        continue;
+      }
+
+      int *temp = moves[idx_1];
+      moves[idx_1] = moves[idx_2];
+      moves[idx_2] = temp;
+    }
+  }
 
   // printf("Possible moves: %d\n", move_cnt);
   // printf("Board: \"%s\"\n", board);
