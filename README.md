@@ -1,7 +1,7 @@
 <center><img src="./assets/cheese.png"></center>
 
 # CCE - Cheese Chess Engine
-Like chess but cheesy? A hobbiest chess engine/game (with high ambitions).
+Like chess but cheesy? A hobbyist chess engine/game (with high ambitions).
 
 ## Algorithms
 CCE currently has 3 algorithms. You can change the algorithm used by editing ```build.sh```. The ELO rating for the algorithms is represented below. (data from various games against Stockfish and human players) 
