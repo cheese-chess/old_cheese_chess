@@ -84,6 +84,7 @@ const int pawn_table[] = {
 };
 
 static int cheese_value(char piece, int pos) {
+    int black = 0;
     if (piece == ' ') return 0;
     if (piece >= 'a') piece -= 32;
 
@@ -121,7 +122,7 @@ int cheese_eval(char *board, int turn) {
   return score;
 }
 
-int cheese_move(char *board, int turn, int layers) {
+int cheese_move(char *board, int *move, int do_move, int turn, int layers) {
   int **moves = chess_get_moves(board, turn);
   if (!moves) return -10101010;
 
@@ -145,12 +146,13 @@ int cheese_move(char *board, int turn, int layers) {
     int score = cheese_eval(board_clone, turn);
 
     if (layers > 0) {
-      int temp_score = -cheese_move(board_clone, 1 - turn, layers - 1);
+      int temp_score = -cheese_move(board_clone, NULL, 0, 1 - turn, layers - 1);
 
-      score += temp_score;
+      //score += temp_score;
+      score = score < temp_score ? score : temp_score;
     }
 
-    printf("Move %d[%d('%c') to %d('%c')]: Score %d\n", i, moves[i][0], board[moves[i][0]], moves[i][1], board[moves[i][1]], score);
+    //printf("Move %d[%d('%c') to %d('%c')]: Score %d\n", i, moves[i][0], board[moves[i][0]], moves[i][1], board[moves[i][1]], score);
 
     if (score > best_score) {
       best_move = i;
@@ -162,7 +164,8 @@ int cheese_move(char *board, int turn, int layers) {
 
   if (best_move >= 0) {
     printf("Chosen move %d[%d('%c') to %d('%c')]: Score %d\n", best_move, moves[best_move][0], board[moves[best_move][0]], moves[best_move][1], board[moves[best_move][1]], best_score);
-    chess_move(board, moves[best_move]);
+    if (do_move) chess_move(board, moves[best_move]);
+    if (move != NULL) memcpy(move, moves[best_move], sizeof(int) * 2);
   } else {
     printf("No move chosen\n");
   }

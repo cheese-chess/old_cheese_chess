@@ -19,10 +19,7 @@ const int cheese_table[] = {
 };
 
 static int cheese_value(char piece, int pos) {
-<<<<<<< HEAD
-  int black = 0;
-=======
->>>>>>> 328dc4df43b5f8a9a543049a0a5214ea00ae3250
+  
   if (piece == ' ') return 0;
   if (piece >= 'a') piece -= 32;
 
