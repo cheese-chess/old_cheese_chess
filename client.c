@@ -3,6 +3,7 @@
 #include <cheese.h>
 #include <chess.h>
 #include <math.h>
+#include <stdio.h>
 
 static Texture get_piece_tex(Texture pieces_tex[12], char piece) {
   Texture piece_tex;
@@ -50,7 +51,16 @@ static Texture get_piece_tex(Texture pieces_tex[12], char piece) {
   return piece_tex;
 }
 
-int main(void) {
+int main(int argc, char *argv[]) {
+
+  if (argc != 2) {
+    printf("Usage: ./cheese <depth>\n");
+    exit(1);
+  }
+
+  char *p;
+  int depth = strtol(argv[1], &p, 10);
+
   const int scr_width = 144 * 4;
   const int scr_height = 132 * 4;
 
@@ -124,8 +134,7 @@ int main(void) {
     }
 
     if (move_changed) {
-      cheese_move(board, best_move, 0, CHESS_WHITE, 3);
-
+      cheese_move(board, best_move, 0, CHESS_WHITE, depth - 1);
       move_changed = 0;
     } else {
       int x_0 = best_move[0] % 8;
@@ -177,7 +186,7 @@ int main(void) {
 
             moving_idx = -1;
 
-            cheese_move(board, NULL, 1, CHESS_BLACK, 4);
+            cheese_move(board, NULL, 1, CHESS_BLACK, depth);
 
             move_changed = 1;
           } else if (move[0] == move[1]) {
@@ -189,8 +198,8 @@ int main(void) {
       }
     } else if (IsKeyPressed(KEY_SPACE)) {
       if (moving_idx == -1) {
-        cheese_move(board, NULL, 1, CHESS_WHITE, 4);
-        cheese_move(board, NULL, 1, CHESS_BLACK, 4);
+        cheese_move(board, NULL, 1, CHESS_WHITE, depth);
+        cheese_move(board, NULL, 1, CHESS_BLACK, depth);
 
         move_changed = 1;
       }
