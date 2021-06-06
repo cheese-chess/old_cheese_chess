@@ -5,6 +5,8 @@
 #define CHESS_BLACK 1
 #define CHESS_NONE  2
 
+#define CHESS_MAX_SCORE 1048576
+
 int chess_turn(char piece);
 
 int chess_ended(char *board);
