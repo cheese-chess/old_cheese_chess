@@ -26,4 +26,6 @@ After that, you should see a ```cheese``` executable. Run it to open the game:
 ./cheese <depth>
 ```
 where depth is the number of layers the algorithm should search. Recommended: 4.<br>
+
+## Changing the Algorithm
 To change the algorithm, open ```build.sh``` and put the name of your algorithm. For example, if the algorithm is ```CHEESE_ALGO_SEGFAULTDEV``` and you want to try the aa2006 algorithm, you would change it to ```CHEESE_ALGO_AA2006```. After that, build again, and execute.
