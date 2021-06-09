@@ -2,8 +2,20 @@
 #include <stdlib.h>
 #include <cheese.h>
 #include <chess.h>
+#include <string.h>
 #include <math.h>
 #include <stdio.h>
+
+bool isNumber(char number[])
+{
+    int i = 0;
+    for (; number[i] != 0; i++) {
+        if (!isdigit(number[i]))
+            return false;
+    }
+    return true;
+}
+
 
 static Texture get_piece_tex(Texture pieces_tex[12], char piece) {
   Texture piece_tex;
@@ -52,40 +64,108 @@ static Texture get_piece_tex(Texture pieces_tex[12], char piece) {
 }
 
 int main(int argc, char *argv[]) {
-
-  if (argc != 2) {
-    printf("Usage: ./cheese <depth>\n");
+  char *p;
+  if (argc < 3) {
+    printf("Usage: ./cheese <depth> <theme>\n");
     exit(1);
+  } else {
+    if (!isNumber(argv[1]) || !isNumber(argv[2])) {
+      printf("Depth and Theme must be integers!\n");
+      exit(3);
+    }
   }
 
-  char *p;
-  int depth = strtol(argv[1], &p, 10);
+  char *folder;
+  int theme = strtol(argv[2], &p, 10);
+  if (!isNumber(argv[2]) || theme > 2 || theme < 1) {
+    printf("Theme not found.\n");
+    exit(2);
+  }
+  if (theme == 1) folder = "assets/pixelated_default";
+  if (theme == 2) folder = "assets/pixelated_modern";
+
+  char *k;
+  int depth = strtol(argv[1], &k, 10);
 
   const int scr_width = 144 * 4;
   const int scr_height = 132 * 4;
 
+  char *bishop_black = "/bishop_black.png";
+  char *pawn_black = "/pawn_black.png";
+  char *rook_black = "/rook_black.png";
+  char *king_black = "/king_black.png";
+  char *queen_black = "/queen_black.png";
+  char *knight_black = "/knight_black.png";
+  
+  char *bishop_white = "/bishop_white.png";
+  char *pawn_white = "/pawn_white.png";
+  char *rook_white = "/rook_white.png";
+  char *king_white = "/king_white.png";
+  char *queen_white = "/queen_white.png";
+  char *knight_white = "/knight_white.png";
+
+  char * bishop_black_malloc = (char *) malloc(1 + strlen(bishop_black)+ strlen(folder) );
+  char * pawn_black_malloc = (char *) malloc(1 + strlen(pawn_black)+ strlen(folder) );
+  char * rook_black_malloc = (char *) malloc(1 + strlen(rook_black)+ strlen(folder) );
+  char * king_black_malloc = (char *) malloc(1 + strlen(king_black)+ strlen(folder) );
+  char * queen_black_malloc = (char *) malloc(1 + strlen(queen_black)+ strlen(folder) );
+  char * knight_black_malloc = (char *) malloc(1 + strlen(knight_black)+ strlen(folder) );
+  char * bishop_white_malloc = (char *) malloc(1 + strlen(bishop_white)+ strlen(folder) );
+  char * pawn_white_malloc = (char *) malloc(1 + strlen(pawn_white)+ strlen(folder) );
+  char * rook_white_malloc = (char *) malloc(1 + strlen(rook_white)+ strlen(folder) );
+  char * queen_white_malloc = (char *) malloc(1 + strlen(queen_white)+ strlen(folder) );
+  char * knight_white_malloc = (char *) malloc(1 + strlen(knight_white)+ strlen(folder) );
+  char * king_white_malloc = (char *) malloc(1 + strlen(king_white)+ strlen(folder) );
+
+  strcpy(bishop_black_malloc, folder);
+  strcpy(pawn_black_malloc, folder);
+  strcpy(rook_black_malloc, folder);
+  strcpy(king_black_malloc, folder);
+  strcpy(queen_black_malloc, folder);
+  strcpy(knight_black_malloc, folder);
+  strcpy(bishop_white_malloc, folder);
+  strcpy(pawn_white_malloc, folder);
+  strcpy(rook_white_malloc, folder);
+  strcpy(queen_white_malloc, folder);
+  strcpy(knight_white_malloc, folder);
+  strcpy(king_white_malloc, folder);
+
+  strcat(bishop_black_malloc, bishop_black);
+  strcat(pawn_black_malloc, pawn_black);
+  strcat(rook_black_malloc, rook_black);
+  strcat(king_black_malloc, king_black);
+  strcat(queen_black_malloc, queen_black);
+  strcat(knight_black_malloc, knight_black);
+  strcat(bishop_white_malloc, bishop_white);
+  strcat(pawn_white_malloc, pawn_white);
+  strcat(rook_white_malloc, rook_white);
+  strcat(king_white_malloc, king_white);
+  strcat(queen_white_malloc, queen_white);
+  strcat(knight_white_malloc, knight_white);
+  
   InitWindow(scr_width, scr_height, "cheese_chess");
 
   Texture pieces_tex[12] = {
-    LoadTexture("assets/bishop_black.png"),
-    LoadTexture("assets/pawn_black.png"),
-    LoadTexture("assets/rook_black.png"),
-    LoadTexture("assets/knight_black.png"),
-    LoadTexture("assets/king_black.png"),
-    LoadTexture("assets/queen_black.png"),
-    LoadTexture("assets/bishop_white.png"),
-    LoadTexture("assets/pawn_white.png"),
-    LoadTexture("assets/rook_white.png"),
-    LoadTexture("assets/knight_white.png"),
-    LoadTexture("assets/king_white.png"),
-    LoadTexture("assets/queen_white.png")
+    LoadTexture(bishop_black_malloc),
+    LoadTexture(pawn_black_malloc),
+    LoadTexture(rook_black_malloc),
+    LoadTexture(knight_black_malloc),
+    LoadTexture(king_black_malloc),
+    LoadTexture(queen_black_malloc),
+    LoadTexture(bishop_white_malloc),
+    LoadTexture(pawn_white_malloc),
+    LoadTexture(rook_white_malloc),
+    LoadTexture(knight_white_malloc),
+    LoadTexture(king_white_malloc),
+    LoadTexture(queen_white_malloc)
   };
 
-  Texture board_tex = LoadTexture("assets/board.png");
-  Texture shadow_tex = LoadTexture("assets/shadow.png");
+  Texture board_tex = LoadTexture("assets/pixelated_default/board.png");
+  Texture shadow_tex = LoadTexture("assets/pixelated_default/shadow.png");
 
-  Texture option_black_tex = LoadTexture("assets/option_black.png");
-  Texture option_white_tex = LoadTexture("assets/option_white.png");
+  Texture option_black_tex = LoadTexture("assets/pixelated_default/option_black.png");
+  Texture option_white_tex = LoadTexture("assets/pixelated_default/option_white.png");
+
 
  char board[65] = \
     "rnbqkbnr" \
