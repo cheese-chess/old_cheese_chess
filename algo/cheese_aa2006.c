@@ -61,14 +61,14 @@ const int queen_table[] = {
 
 //Rook
 const int rook_table[] = {
-  13, 14, 14, 14, 14, 14, 14, 13,
+  14, 14, 14, 14, 14, 14, 14, 14,
   14, 13, 13, 13, 13, 13, 13, 14,
   14, 13, 13, 13, 13, 13, 13, 14,
   14, 13, 13, 13, 13, 13, 13, 14,
   14, 13, 13, 13, 13, 13, 13, 14,
   14, 13, 13, 13, 13, 13, 13, 14,
   14, 13, 13, 13, 13, 13, 13, 14,
-  13, 14, 14, 14, 14, 14, 14, 13
+  14, 14, 14, 14, 14, 14, 14, 14
 };
 
 //Pawn
@@ -84,7 +84,7 @@ const int pawn_table[] = {
 };
 
 const int stages_table[] = {
-  1, 3, 3, 5, 900, 10000,
+  1, 3, 3, 10, 900, 10000,
   1, 6, 6, 10, 1800, 10000,
   3, 3, 3, 100, 1800, 10000
 };
@@ -119,10 +119,10 @@ int cheese_eval(char *board, int turn) {
     int temp = chess_turn(board[squares]);
     if (turn == temp) pieces ++;
   }
-
+  printf("%i\n", pieces);
   int stage = 0; //opening
-  if (pieces <= 14) stage = 1; //middlegame
-  if (pieces <= 7) stage = 2; //endgame
+  if (pieces <= 7) {stage = 2;}//endgame
+  else if (pieces <= 14) {stage = 1;} //middlegame
 
   for (int i = 0; i < 64; i++) {
     if (chess_turn(board[i]) == CHESS_NONE) {
@@ -145,8 +145,8 @@ int cheese_move(char *board, int *move, int do_move, int turn, int layers) {
 
   while (moves[move_cnt] != NULL) move_cnt++;
 
-  printf("Possible moves: %d\n", move_cnt);
-  printf("Board: \"%s\"\n", board);
+  //printf("Possible moves: %d\n", move_cnt);
+  //printf("Board: \"%s\"\n", board);
 
   int best_move = -1;
   int best_score = -10101010;
@@ -178,11 +178,11 @@ int cheese_move(char *board, int *move, int do_move, int turn, int layers) {
   free(board_clone);
 
   if (best_move >= 0) {
-    printf("Chosen move %d[%d('%c') to %d('%c')]: Score %d\n", best_move, moves[best_move][0], board[moves[best_move][0]], moves[best_move][1], board[moves[best_move][1]], best_score);
+    //printf("Chosen move %d[%d('%c') to %d('%c')]: Score %d\n", best_move, moves[best_move][0], board[moves[best_move][0]], moves[best_move][1], board[moves[best_move][1]], best_score);
     if (do_move) chess_move(board, moves[best_move]);
     if (move != NULL) memcpy(move, moves[best_move], sizeof(int) * 2);
   } else {
-    printf("No move chosen\n");
+    //printf("No move chosen\n");
   }
 
   chess_free(moves);
