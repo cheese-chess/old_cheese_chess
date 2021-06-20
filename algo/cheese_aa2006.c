@@ -25,50 +25,50 @@ const int king_table[] = {
 
 //Knight
 const int knight_table[] = {
-  11, 11, 11, 11, 11, 11, 11, 11,
-  11, 13, 13, 13, 13, 13, 13, 11,
-  11, 13, 15, 15, 15, 15, 13, 11,
-  11, 13, 20, 20, 20, 20, 13, 11,
-  11, 13, 20, 20, 20, 20, 13, 11,
-  11, 13, 15, 15, 15, 15, 13, 11,
-  11, 13, 13, 13, 13, 13, 13, 11,
-  11, 11, 11, 11, 11, 11, 11, 11
+  13, 13, 13, 13, 13, 13, 13, 13,
+  13, 13, 13, 13, 13, 13, 13, 13,
+  13, 13, 15, 15, 15, 15, 13, 13,
+  13, 13, 20, 20, 20, 20, 13, 13,
+  13, 13, 20, 20, 20, 20, 13, 13,
+  13, 13, 15, 15, 15, 15, 13, 13,
+  13, 13, 13, 13, 13, 13, 13, 13,
+  13, 13, 13, 13, 13, 13, 13, 13
 };
 
 //Bishop
 const int bishop_table[] = {
-  11, 12, 12, 12, 12, 12, 12, 11,
-  12, 13, 13, 13, 13, 13, 13, 12,
-  12, 13, 15, 15, 15, 15, 13, 12,
-  12, 13, 15, 15, 15, 15, 13, 12,
-  12, 13, 15, 15, 15, 15, 13, 12,
-  12, 13, 15, 15, 15, 15, 13, 12,
-  12, 13, 13, 13, 13, 13, 13, 12,
-  11, 12, 12, 12, 12, 12, 12, 11
+  13, 14, 14, 14, 14, 14, 14, 13,
+  14, 13, 13, 13, 13, 13, 13, 14,
+  14, 13, 15, 15, 15, 15, 13, 14,
+  14, 13, 15, 15, 15, 15, 13, 14,
+  14, 13, 15, 15, 15, 15, 13, 14,
+  14, 13, 15, 15, 15, 15, 13, 14,
+  14, 13, 13, 13, 13, 13, 13, 14,
+  13, 14, 14, 14, 14, 14, 14, 13
 };
 
 //Queen
 const int queen_table[] = {
-  11, 12, 12, 15, 15, 12, 12, 11,
-  12, 13, 13, 13, 13, 13, 13, 12,
-  12, 13, 15, 15, 15, 15, 13, 12,
-  12, 13, 15, 15, 15, 15, 13, 12,
-  12, 13, 15, 15, 15, 15, 13, 12,
-  12, 13, 15, 15, 15, 15, 13, 12,
-  12, 13, 13, 13, 13, 13, 13, 12,
-  11, 12, 12, 15, 15, 12, 12, 11
+  13, 14, 14, 15, 15, 14, 14, 13,
+  14, 13, 13, 13, 13, 13, 13, 14,
+  14, 13, 15, 15, 15, 15, 13, 14,
+  14, 13, 15, 15, 15, 15, 13, 14,
+  14, 13, 15, 15, 15, 15, 13, 14,
+  14, 13, 15, 15, 15, 15, 13, 14,
+  14, 13, 13, 13, 13, 13, 13, 14,
+  13, 14, 14, 15, 15, 14, 14, 13
 };
 
 //Rook
 const int rook_table[] = {
-  11, 12, 12, 12, 12, 12, 12, 11,
-  12, 11, 11, 11, 11, 11, 11, 12,
-  12, 11, 11, 11, 11, 11, 11, 12,
-  12, 11, 11, 11, 11, 11, 11, 12,
-  12, 11, 11, 11, 11, 11, 11, 12,
-  12, 11, 11, 11, 11, 11, 11, 12,
-  12, 11, 11, 11, 11, 11, 11, 12,
-  11, 12, 12, 12, 12, 12, 12, 11
+  13, 14, 14, 14, 14, 14, 14, 13,
+  14, 13, 13, 13, 13, 13, 13, 14,
+  14, 13, 13, 13, 13, 13, 13, 14,
+  14, 13, 13, 13, 13, 13, 13, 14,
+  14, 13, 13, 13, 13, 13, 13, 14,
+  14, 13, 13, 13, 13, 13, 13, 14,
+  14, 13, 13, 13, 13, 13, 13, 14,
+  13, 14, 14, 14, 14, 14, 14, 13
 };
 
 //Pawn
@@ -83,39 +83,54 @@ const int pawn_table[] = {
   20, 20, 20, 20, 20, 20, 20, 20
 };
 
-static int cheese_value(char piece, int pos) {
+const int stages_table[] = {
+  1, 3, 3, 5, 900, 10000,
+  1, 6, 6, 10, 1800, 10000,
+  3, 3, 3, 100, 1800, 10000
+};
+
+static int cheese_value(char piece, int pos, int stage) {
     int black = 0;
     if (piece == ' ') return 0;
     if (piece >= 'a') piece -= 32;
 
     switch(piece) {
         case 'P':
-            return 1 * pawn_table[pos];
+            return stages_table[stage * 6] * pawn_table[pos];
         case 'B': 
-            return 6 * bishop_table[pos];
+            return stages_table[stage * 6 + 1] * bishop_table[pos];
         case 'N':
-            return 5 * knight_table[pos];
+            return stages_table[stage * 6 + 2] * knight_table[pos];
         case 'R':
-            return 10 * rook_table[pos];
+            return stages_table[stage * 6 + 3] * rook_table[pos];
         case 'Q':
-            return 900 * queen_table[pos];
+            return stages_table[stage * 6 + 4] * queen_table[pos];
         case 'K':
-            return 10000 * king_table[pos];
+            return stages_table[stage * 6 + 5] * king_table[pos];
     }
 
     return 0;
 }
 
 int cheese_eval(char *board, int turn) {
-  int score = 0;
+  int score = 0, pieces = 0, squares = 64;
+  
+  while (squares --) {
+    int temp = chess_turn(board[squares]);
+    if (turn == temp) pieces ++;
+  }
+
+  int stage = 0; //opening
+  if (pieces <= 14) stage = 1; //middlegame
+  if (pieces <= 7) stage = 2; //endgame
 
   for (int i = 0; i < 64; i++) {
     if (chess_turn(board[i]) == CHESS_NONE) {
       continue;
     } else if (chess_turn(board[i]) == turn) {
-      score += cheese_value(board[i], i);
+      score += cheese_value(board[i], i, stage);
     } else {
-      score -= cheese_value(board[i], i);
+      score -= cheese_value(board[i], i, stage);
     }
   }
 
